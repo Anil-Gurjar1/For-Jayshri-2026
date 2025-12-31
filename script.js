@@ -1,7 +1,8 @@
-const targetDate = new Date("Jan 1, 2026 00:00:00").getTime();
+let countdownStarted = false;
+let timeLeft = 150; // 2.5 minute = 150 seconds
 
 const memories = [
-    { url: 'IMAGES/20241201_163811(1).jpg', msg: "Starting with my favorite smile... ❤️" },
+    { url: 'IMAGES/20241201_163811(1).jpg', msg: "Starting with my favorite memory... ❤️" },
     { url: 'IMAGES/20251212_160540.jpg', msg: "Remember this beautiful day?" },
     { url: 'IMAGES/20251212_195520.jpg', msg: "I'm so grateful for you." },
     { url: 'IMAGES/20251213_092653.jpg', msg: "Every day is better with you." },
@@ -15,10 +16,11 @@ const bgMusic = document.getElementById('bg-music');
 document.getElementById('start-btn').onclick = () => {
     document.getElementById('overlay').style.display = 'none';
     if(bgMusic) bgMusic.play();
-    startGallery();
+    startSurprise();
 };
 
-function startGallery() {
+function startSurprise() {
+    // 1. Start Photo Gallery
     setInterval(() => {
         currentIndex = (currentIndex + 1) % memories.length;
         const img = document.getElementById('display-img');
@@ -30,32 +32,37 @@ function startGallery() {
             img.style.opacity = 1;
         }, 1000);
     }, 5000);
+
+    // 2. Start 2.5 Minute Countdown
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        
+        // Top bar timer update
+        document.getElementById('small-timer').innerText = 
+            `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+
+        // Last 30 seconds big countdown
+        if (timeLeft <= 30 && timeLeft > 0) {
+            document.getElementById('countdown-30s').style.display = 'flex';
+            document.getElementById('big-num').innerText = s;
+        }
+
+        // Countdown Finished
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            celebrate();
+        }
+    }, 1000);
 }
-
-const timer = setInterval(() => {
-    const now = new Date().getTime();
-    const diff = targetDate - now;
-    const h = Math.floor(diff / (1000 * 60 * 60));
-    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-    const timerEl = document.getElementById('small-timer');
-    if(timerEl) timerEl.innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-
-    if (diff <= 30000 && diff > 0) {
-        document.getElementById('countdown-30s').style.display = 'flex';
-        document.getElementById('big-num').innerText = s;
-    }
-    if (diff <= 0) {
-        clearInterval(timer);
-        celebrate();
-    }
-}, 1000);
 
 function celebrate() {
     document.getElementById('countdown-30s').style.display = 'none';
     document.getElementById('main-content').style.display = 'none';
     document.getElementById('midnight-screen').style.display = 'flex';
+    
     const end = Date.now() + (60 * 1000);
     (function frame() {
         confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
