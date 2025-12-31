@@ -1,5 +1,7 @@
-let timeLeft = 150; // Total time 2.5 minutes (150 seconds)
+// Total time 150 seconds (2.5 minutes)
+let timeLeft = 20; 
 
+// Aapki photos ke sahi naam (Inhe check kar lena)
 const memories = [
     { url: 'IMAGES/20241201_163811(1).jpg', msg: "Starting with our best memories... ❤️" },
     { url: 'IMAGES/20251212_160540.jpg', msg: "I love this picture of us!" },
@@ -12,21 +14,24 @@ const memories = [
 let currentIndex = 0;
 const bgMusic = document.getElementById('bg-music');
 
-document.getElementById('start-btn').onclick = () => {
+// Jab button click hoga tabhi sab shuru hoga
+document.getElementById('start-btn').onclick = function() {
     document.getElementById('overlay').style.display = 'none';
-    if(bgMusic) bgMusic.play();
+    if(bgMusic) {
+        bgMusic.play().catch(e => console.log("Music play error:", e));
+    }
     startSurprise();
 };
 
 function startSurprise() {
-    // 1. Photo Gallery (Har 5 second mein photo badlegi)
-    const galleryInterval = setInterval(() => {
+    // 1. Photos change karne ka logic
+    const galleryInterval = setInterval(function() {
         currentIndex = (currentIndex + 1) % memories.length;
         const img = document.getElementById('display-img');
         const msg = document.getElementById('love-message');
         if(img) {
             img.style.opacity = 0;
-            setTimeout(() => {
+            setTimeout(function() {
                 img.src = memories[currentIndex].url;
                 msg.innerText = memories[currentIndex].msg;
                 img.style.opacity = 1;
@@ -34,30 +39,33 @@ function startSurprise() {
         }
     }, 5000);
 
-    // 2. Timer Logic
-    const timerInterval = setInterval(() => {
+    // 2. Countdown logic
+    const timerInterval = setInterval(function() {
         timeLeft--;
 
-        // Top bar mein 2:30 se countdown dikhega
+        // Top timer bar update
         const m = Math.floor(timeLeft / 60);
         const s = timeLeft % 60;
         const timerEl = document.getElementById('small-timer');
-        if(timerEl) timerEl.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        if(timerEl) {
+            timerEl.innerText = m.toString().padStart(2,'0') + ":" + s.toString().padStart(2,'0');
+        }
 
-        // --- SPECIAL TRIGGER: Jab sirf 10 seconds bache hon ---
+        // --- 10 Seconds bache par "HOLD MY HANDS" ---
         if (timeLeft <= 10 && timeLeft > 0) {
             const countdownOverlay = document.getElementById('countdown-30s');
             const bigNum = document.getElementById('big-num');
             
             if (countdownOverlay) {
-                countdownOverlay.style.display = 'flex'; // Bada countdown show karna
-                bigNum.innerText = timeLeft; // 10, 9, 8...
+                countdownOverlay.style.display = 'flex'; 
+                bigNum.innerText = timeLeft; 
                 
                 const pTag = countdownOverlay.querySelector('p');
                 if(pTag) pTag.innerText = "HOLD MY HANDS... ❤️"; 
             }
         }
 
+        // --- Timer khatam hone par Celebration ---
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
             clearInterval(galleryInterval);
@@ -67,10 +75,12 @@ function startSurprise() {
 }
 
 function celebrate() {
+    // Sab kuch chhupa kar final screen dikhana
     document.getElementById('countdown-30s').style.display = 'none';
     document.getElementById('main-content').style.display = 'none';
     document.getElementById('midnight-screen').style.display = 'flex';
     
+    // Fireworks chalu karna
     const end = Date.now() + (60 * 1000);
     (function frame() {
         confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 } });
