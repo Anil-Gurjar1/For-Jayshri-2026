@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="overlay">
+        <div class="heart-loader"></div>
+        <button id="start-btn">
+            <span class="animated-text">Click to revise our memories</span> 
+            <span class="name-highlight">Jayshri 💖</span>
+        </button>
+    </div>
+
+    <div id="top-bar">
+        <div class="glass-effect">Next Year in: <span id="small-timer">00:00:00</span></div>
+    </div>
+
+    <main id="main-content">
+        <div class="gallery-container">
+            <img id="display-img" src="IMAGES/20241201_163811(1).jpg" alt="Our Memory">
+            <div id="love-message">Every moment with you is magic...</div>
+        </div>
+    </main>
+
+    <div id="countdown-30s">
+        <div class="pulse-circle">
+            <h2 id="big-num">30</h2>
+        </div>
+        <p>HOLD MY HAND...</p>
+    </div>
+
+    <div id="midnight-screen">
+        <h1 class="firework-text">HAPPY NEW YEAR 2026! ❤️</h1>
+        <p class="sub-text">I love you more than words can say.</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
