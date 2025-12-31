@@ -1,31 +1,26 @@
-// Total time 150 seconds (2.5 minutes)
-let timeLeft = 20; 
+let timeLeft = 150; // 2.5 Minutes
 
-// Aapki photos ke sahi naam (Inhe check kar lena)
 const memories = [
-    { url: 'IMAGES/20241201_163811(1).jpg', msg: "Starting with our best memories... ❤️" },
-    { url: 'IMAGES/20251212_160540.jpg', msg: "I love this picture of us!" },
-    { url: 'IMAGES/20251212_195520.jpg', msg: "Grateful for every moment." },
-    { url: 'IMAGES/20251213_092653.jpg', msg: "You are my everything." },
-    { url: 'IMAGES/20251213_093322.jpg', msg: "You make me so happy!" },
-    { url: 'IMAGES/20251213_095207.jpg', msg: "Can't wait for 2026 with you." }
+    { url: 'IMAGES/20241201_163811(1).jpg', msg: "I remember this day so clearly... ❤️" },
+    { url: 'IMAGES/20251212_160540.jpg', msg: "You look so beautiful here." },
+    { url: 'IMAGES/20251212_195520.jpg', msg: "I am so lucky to have you." },
+    { url: 'IMAGES/20251213_092653.jpg', msg: "Let's make more memories like this." },
+    { url: 'IMAGES/20251213_093322.jpg', msg: "Every second with you is a gift." },
+    { url: 'IMAGES/20251213_095207.jpg', msg: "2026 is ours! ❤️" }
 ];
 
 let currentIndex = 0;
 const bgMusic = document.getElementById('bg-music');
 
-// Jab button click hoga tabhi sab shuru hoga
 document.getElementById('start-btn').onclick = function() {
     document.getElementById('overlay').style.display = 'none';
-    if(bgMusic) {
-        bgMusic.play().catch(e => console.log("Music play error:", e));
-    }
-    startSurprise();
+    if(bgMusic) bgMusic.play();
+    startApp();
 };
 
-function startSurprise() {
-    // 1. Photos change karne ka logic
-    const galleryInterval = setInterval(function() {
+function startApp() {
+    // 1. Photo Cycle
+    setInterval(function() {
         currentIndex = (currentIndex + 1) % memories.length;
         const img = document.getElementById('display-img');
         const msg = document.getElementById('love-message');
@@ -39,54 +34,38 @@ function startSurprise() {
         }
     }, 5000);
 
-    // 2. Countdown logic
-    const timerInterval = setInterval(function() {
+    // 2. Countdown Timer
+    const timer = setInterval(function() {
         timeLeft--;
-
-        // Top timer bar update
         const m = Math.floor(timeLeft / 60);
         const s = timeLeft % 60;
-        const timerEl = document.getElementById('small-timer');
-        if(timerEl) {
-            timerEl.innerText = m.toString().padStart(2,'0') + ":" + s.toString().padStart(2,'0');
-        }
+        document.getElementById('small-timer').innerText = m.toString().padStart(2,'0') + ":" + s.toString().padStart(2,'0');
 
-        // --- 10 Seconds bache par "HOLD MY HANDS" ---
+        // Trigger: Jab 10 seconds bache hon
         if (timeLeft <= 10 && timeLeft > 0) {
-            const countdownOverlay = document.getElementById('countdown-30s');
-            const bigNum = document.getElementById('big-num');
-            
-            if (countdownOverlay) {
-                countdownOverlay.style.display = 'flex'; 
-                bigNum.innerText = timeLeft; 
-                
-                const pTag = countdownOverlay.querySelector('p');
-                if(pTag) pTag.innerText = "HOLD MY HANDS... ❤️"; 
-            }
+            document.getElementById('countdown-30s').style.display = 'flex';
+            document.getElementById('big-num').innerText = timeLeft;
         }
 
-        // --- Timer khatam hone par Celebration ---
+        // Trigger: Countdown Khatam
         if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            clearInterval(galleryInterval);
-            celebrate();
+            clearInterval(timer);
+            showFireworks();
         }
     }, 1000);
 }
 
-function celebrate() {
-    // Sab kuch chhupa kar final screen dikhana
+function showFireworks() {
     document.getElementById('countdown-30s').style.display = 'none';
     document.getElementById('main-content').style.display = 'none';
     document.getElementById('midnight-screen').style.display = 'flex';
     
-    // Fireworks chalu karna
-    const end = Date.now() + (60 * 1000);
+    const duration = 60 * 1000;
+    const end = Date.now() + duration;
+
     (function frame() {
-        confetti({ particleCount: 7, angle: 60, spread: 55, origin: { x: 0 } });
-        confetti({ particleCount: 7, angle: 120, spread: 55, origin: { x: 1 } });
+        confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+        confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
         if (Date.now() < end) requestAnimationFrame(frame);
     }());
 }
-
-
