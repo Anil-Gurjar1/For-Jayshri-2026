@@ -45,7 +45,7 @@ function startSurprise() {
             `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
 
         // Last 30 seconds big countdown
-        if (timeLeft <= 30 && timeLeft > 0) {
+        if (timeLeft <= 10 && timeLeft > 0) {
             document.getElementById('countdown-30s').style.display = 'flex';
             document.getElementById('big-num').innerText = s;
         }
@@ -70,3 +70,4 @@ function celebrate() {
         if (Date.now() < end) requestAnimationFrame(frame);
     }());
 }
+
